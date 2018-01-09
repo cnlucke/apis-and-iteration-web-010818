@@ -13,10 +13,10 @@ def get_character_movies_from_api(character="Luke Skywalker")
   all_character_array.concat(character_hash["results"])
 
   i = 2
-  while i < 10
+  while !(character_hash["next"].nil?)
     next_characters = RestClient.get("http://www.swapi.co/api/people/?page=#{i}")
-    next_characters_hash = JSON.parse(next_characters)
-    all_character_array.concat(next_characters_hash["results"])
+    character_hash = JSON.parse(next_characters)
+    all_character_array.concat(character_hash["results"])
     i += 1
   end
 
