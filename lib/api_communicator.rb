@@ -4,12 +4,24 @@ require 'pry'
 
 def get_character_movies_from_api(character="Luke Skywalker")
   #make the web request
+
+
   all_characters = RestClient.get('http://www.swapi.co/api/people/')
   character_hash = JSON.parse(all_characters)
+  all_character_array = []
 
+  all_character_array.concat(character_hash["results"])
 
-  charArr = character_hash["results"].select do |char|
-    char["name"]== character
+  i = 2
+  while i < 10
+    next_characters = RestClient.get("http://www.swapi.co/api/people/?page=#{i}")
+    next_characters_hash = JSON.parse(next_characters)
+    all_character_array.concat(next_characters_hash["results"])
+    i += 1
+  end
+
+  charArr = all_character_array.select do |char|
+    char["name"] == character
   end
 
   if charArr.any?
