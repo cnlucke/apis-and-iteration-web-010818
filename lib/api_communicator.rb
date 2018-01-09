@@ -8,25 +8,40 @@ def get_character_movies_from_api(character="Luke Skywalker")
   character_hash = JSON.parse(all_characters)
 
 
-   charArr = character_hash["results"].select do |char|
+  charArr = character_hash["results"].select do |char|
     char["name"]== character
   end
-  films = []
-  charArr[0]["films"].each do |film|
-     films << JSON.parse(RestClient.get(film))
-   end
-   films
 
+  if charArr.any?
+    films = []
+
+    charArr[0]["films"].each do |film|
+      films << JSON.parse(RestClient.get(film))
+      end
+
+      films
+  else
+
+  end
 end
 
 def parse_character_movies(films_hash)
   # some iteration magic and puts out the movies in a nice list
+  movies = []
 
+  films_hash.each do |film|
+    movies << film["title"]
+  end
+
+  movies
 end
 
 def show_character_movies(character)
   films_hash = get_character_movies_from_api(character)
-  parse_character_movies(films_hash)
+
+  if films_hash
+    parse_character_movies(films_hash)
+  end
 end
 
 ## BONUS
